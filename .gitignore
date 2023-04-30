@@ -1,0 +1,12 @@
+# ignore venv folder
+venv/
+
+# ignore secrets file
+config/secrets_*.ini
+
+# ignore logs
+logs/*.log
+
+# ignore data
+data/*
+!data/.gitkeep
