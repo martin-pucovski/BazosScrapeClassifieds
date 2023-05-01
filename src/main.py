@@ -32,7 +32,7 @@ from bs4 import BeautifulSoup
 
 # Get config file name from argument
 # TEST CONFIG_NAME = sys.argv[1]
-CONFIG_NAME = 'config_TEST.ini'
+CONFIG_NAME = 'config_PROD.ini'
 
 PROJECT_DIRECTORY = Path(os.getcwd())
 LOGS_FOLDER = "logs"
@@ -54,7 +54,7 @@ current_date = datetime.datetime.now().strftime("%Y%m%d")
 log_file_name = f"log_{current_date}.log"
 log_file = Path(PROJECT_DIRECTORY) / LOGS_FOLDER / log_file_name
 file_handler = logging.FileHandler(
-    filename=log_file, mode="a", encoding=None, delay=False)
+    filename=log_file, mode="a", encoding='utf-8', delay=False)
 stdout_handler = logging.StreamHandler(sys.stdout)
 handlers = [file_handler, stdout_handler]
 logging.basicConfig(handlers=handlers,
@@ -160,6 +160,7 @@ def index_classifieds() -> list:
             # If there is a next page, get the link
             if text.text == "Ďalšia":
                 bazos_link = bazos_base + text['href']
+                logging.info("Switch to page %s", bazos_link)
             # If no next page, finish
             else:
                 break
@@ -192,6 +193,9 @@ def scrape_one(one_classified):
 
     :param one_classified: object for one classified ad
     """
+
+    title = one_classified.title
+    logging.info("Start scraping %s", title)
 
     # Get page
     request = requests.get(one_classified.link, timeout=30)
